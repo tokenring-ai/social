@@ -5,6 +5,5 @@ export const SocialMediaAgentConfigSchema = z.object({
 }).default({});
 
 export const SocialMediaConfigSchema = z.object({
-  providers: z.record(z.string(), z.any()).default({}),
   agentDefaults: SocialMediaAgentConfigSchema.prefault({}),
 });
