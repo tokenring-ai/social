@@ -4,6 +4,7 @@ import {TokenRingService} from "@tokenring-ai/app/types";
 import deepMerge from "@tokenring-ai/utility/object/deepMerge";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
 import {z} from "zod";
+import {SocialMediaAgentConfigSchema, SocialMediaConfigSchema} from "./schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -11,7 +12,6 @@ import type {
   SocialMediaPostFilterOptions,
   SocialMediaProvider,
 } from "./SocialMediaProvider.ts";
-import {SocialMediaAgentConfigSchema, SocialMediaConfigSchema} from "./schema.ts";
 import {SocialMediaState} from "./state/SocialMediaState.ts";
 
 export default class SocialMediaService implements TokenRingService {

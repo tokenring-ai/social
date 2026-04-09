@@ -1,7 +1,8 @@
 import {Agent} from "@tokenring-ai/agent";
+import {beforeEach, describe, expect, it} from "vitest";
 import createTestingAgent from "../../agent/test/createTestingAgent.ts";
 import createTestingApp from "../../app/test/createTestingApp.ts";
-import {beforeEach, describe, expect, it} from "vitest";
+import {SocialMediaConfigSchema} from "../schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -10,7 +11,6 @@ import type {
   SocialMediaProvider,
 } from "../SocialMediaProvider.ts";
 import SocialMediaService from "../SocialMediaService.ts";
-import {SocialMediaConfigSchema} from "../schema.ts";
 import {SocialMediaState} from "../state/SocialMediaState.ts";
 
 class TestSocialProvider implements SocialMediaProvider {

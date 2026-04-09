@@ -1,5 +1,6 @@
 import {Agent} from "@tokenring-ai/agent";
 import TokenRingApp from "@tokenring-ai/app";
+import {SocialMediaConfigSchema} from "../../schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -8,7 +9,6 @@ import type {
   SocialMediaProvider,
 } from "../../SocialMediaProvider.ts";
 import SocialMediaService from "../../SocialMediaService.ts";
-import {SocialMediaConfigSchema} from "../../schema.ts";
 
 class TestSocialProvider implements SocialMediaProvider {
   description = "Test social provider";
