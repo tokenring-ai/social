@@ -1,10 +1,10 @@
-import Agent from "@tokenring-ai/agent/Agent";
+import type Agent from "@tokenring-ai/agent/Agent";
 import type {AgentCreationContext} from "@tokenring-ai/agent/types";
-import {TokenRingService} from "@tokenring-ai/app/types";
+import type {TokenRingService} from "@tokenring-ai/app/types";
 import deepMerge from "@tokenring-ai/utility/object/deepMerge";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
-import {z} from "zod";
-import {SocialMediaAgentConfigSchema, SocialMediaConfigSchema} from "./schema.ts";
+import type {z} from "zod";
+import {SocialMediaAgentConfigSchema, type SocialMediaConfigSchema,} from "./schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -16,14 +16,16 @@ import {SocialMediaState} from "./state/SocialMediaState.ts";
 
 export default class SocialMediaService implements TokenRingService {
   readonly name = "SocialMediaService";
-  description = "Abstract interface for authenticated social media account operations";
+  description =
+    "Abstract interface for authenticated social media account operations";
 
   private providers = new KeyedRegistry<SocialMediaProvider>();
 
   registerSocialMediaProvider = this.providers.register;
   getAvailableProviders = this.providers.getAllItemNames;
 
-  constructor(readonly options: z.output<typeof SocialMediaConfigSchema>) {}
+  constructor(readonly options: z.output<typeof SocialMediaConfigSchema>) {
+  }
 
   attach(agent: Agent, creationContext: AgentCreationContext): void {
     const agentConfig = deepMerge(
@@ -34,17 +36,20 @@ export default class SocialMediaService implements TokenRingService {
     for (const provider of this.providers.getAllItemValues()) {
       provider.attach?.(agent, creationContext);
     }
-    creationContext.items.push(`Selected social provider: ${initialState.activeProvider ?? "(none)"}`);
+    creationContext.items.push(
+      `Selected social provider: ${initialState.activeProvider ?? "(none)"}`,
+    );
   }
 
   requireActiveProvider(agent: Agent): SocialMediaProvider {
     const activeProvider = agent.getState(SocialMediaState).activeProvider;
-    if (!activeProvider) throw new Error("No social media provider is currently selected");
+    if (!activeProvider)
+      throw new Error("No social media provider is currently selected");
     return this.providers.requireItemByName(activeProvider);
   }
 
   setActiveProvider(name: string, agent: Agent): void {
-    agent.mutateState(SocialMediaState, state => {
+    agent.mutateState(SocialMediaState, (state) => {
       state.activeProvider = name;
     });
   }
@@ -53,8 +58,14 @@ export default class SocialMediaService implements TokenRingService {
     return await this.requireActiveProvider(agent).getAccount(agent);
   }
 
-  async getRecentPosts(filter: SocialMediaPostFilterOptions, agent: Agent): Promise<SocialMediaPost[]> {
-    return await this.requireActiveProvider(agent).getRecentPosts(filter, agent);
+  async getRecentPosts(
+    filter: SocialMediaPostFilterOptions,
+    agent: Agent,
+  ): Promise<SocialMediaPost[]> {
+    return await this.requireActiveProvider(agent).getRecentPosts(
+      filter,
+      agent,
+    );
   }
 
   async getPostById(id: string, agent: Agent): Promise<SocialMediaPost> {
@@ -63,15 +74,21 @@ export default class SocialMediaService implements TokenRingService {
 
   async selectPostById(id: string, agent: Agent): Promise<SocialMediaPost> {
     const post = await this.getPostById(id, agent);
-    agent.mutateState(SocialMediaState, state => {
+    agent.mutateState(SocialMediaState, (state) => {
       state.currentPost = post;
     });
     return post;
   }
 
-  async createPost(data: CreateSocialMediaPostData, agent: Agent): Promise<SocialMediaPost> {
-    const post = await this.requireActiveProvider(agent).createPost(data, agent);
-    agent.mutateState(SocialMediaState, state => {
+  async createPost(
+    data: CreateSocialMediaPostData,
+    agent: Agent,
+  ): Promise<SocialMediaPost> {
+    const post = await this.requireActiveProvider(agent).createPost(
+      data,
+      agent,
+    );
+    agent.mutateState(SocialMediaState, (state) => {
       state.currentPost = post;
     });
     return post;
@@ -81,8 +98,8 @@ export default class SocialMediaService implements TokenRingService {
     return agent.getState(SocialMediaState).currentPost;
   }
 
-  async clearCurrentPost(agent: Agent): Promise<void> {
-    agent.mutateState(SocialMediaState, state => {
+  clearCurrentPost(agent: Agent): void {
+    agent.mutateState(SocialMediaState, (state) => {
       state.currentPost = null;
     });
   }
@@ -90,10 +107,13 @@ export default class SocialMediaService implements TokenRingService {
   async deleteCurrentPost(agent: Agent): Promise<void> {
     const provider = this.requireActiveProvider(agent);
     if (!provider.deletePost) {
-      throw new Error("The active social media provider does not support deleting posts");
+      throw new Error(
+        "The active social media provider does not support deleting posts",
+      );
     }
     const currentPost = this.getCurrentPost(agent);
-    if (!currentPost) throw new Error("No social media post is currently selected");
+    if (!currentPost)
+      throw new Error("No social media post is currently selected");
     await provider.deletePost(currentPost.id, agent);
     await this.clearCurrentPost(agent);
   }

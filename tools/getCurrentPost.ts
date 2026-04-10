@@ -1,13 +1,15 @@
-import Agent from "@tokenring-ai/agent/Agent";
-import {TokenRingToolDefinition} from "@tokenring-ai/chat/schema";
+import type Agent from "@tokenring-ai/agent/Agent";
+import type {TokenRingToolDefinition} from "@tokenring-ai/chat/schema";
 import {z} from "zod";
 import SocialMediaService from "../SocialMediaService.ts";
 
 const name = "social_getCurrentPost";
 const displayName = "Social/getCurrentPost";
 
-async function execute({}: z.output<typeof inputSchema>, agent: Agent) {
-  const currentPost = agent.requireServiceByType(SocialMediaService).getCurrentPost(agent);
+function execute(_args: z.output<typeof inputSchema>, agent: Agent) {
+  const currentPost = agent
+    .requireServiceByType(SocialMediaService)
+    .getCurrentPost(agent);
   if (!currentPost) {
     return {
       type: "json" as const,

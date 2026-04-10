@@ -1,21 +1,24 @@
 import type {TreeLeaf} from "@tokenring-ai/agent/question";
-import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand,} from "@tokenring-ai/agent/types";
 import SocialMediaService from "../../../SocialMediaService.ts";
 import {SocialMediaState} from "../../../state/SocialMediaState.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+async function execute({
+                         agent,
+                       }: AgentCommandInputType<typeof inputSchema>): Promise<string> {
   const socialService = agent.requireServiceByType(SocialMediaService);
   const available = socialService.getAvailableProviders();
-  if (available.length === 0) return "No social media providers are registered.";
+  if (available.length === 0)
+    return "No social media providers are registered.";
   if (available.length === 1) {
     socialService.setActiveProvider(available[0], agent);
     return `Only one provider configured, auto-selecting: ${available[0]}`;
   }
 
   const activeProvider = agent.getState(SocialMediaState).activeProvider;
-  const tree: TreeLeaf[] = available.map(name => ({
+  const tree: TreeLeaf[] = available.map((name) => ({
     name: `${name}${name === activeProvider ? " (current)" : ""}`,
     value: name,
   }));

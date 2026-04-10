@@ -1,11 +1,17 @@
-import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand,} from "@tokenring-ai/agent/types";
 import SocialMediaService from "../../../SocialMediaService.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const post = agent.requireServiceByType(SocialMediaService).getCurrentPost(agent);
-  return post ? `Current social post: ${post.id}` : "No social media post is currently selected.";
+function execute({
+                   agent,
+                 }: AgentCommandInputType<typeof inputSchema>): string {
+  const post = agent
+    .requireServiceByType(SocialMediaService)
+    .getCurrentPost(agent);
+  return post
+    ? `Current social post: ${post.id}`
+    : "No social media post is currently selected.";
 }
 
 export default {

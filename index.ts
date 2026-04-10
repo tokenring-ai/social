@@ -1,5 +1,3 @@
-export {SocialMediaConfigSchema, SocialMediaAgentConfigSchema} from "./schema.ts";
-export {default as SocialMediaService} from "./SocialMediaService.ts";
 export type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -17,3 +15,8 @@ export {
   SocialMediaMetricsSchema,
   SocialMediaPostSchema,
 } from "./SocialMediaProvider.ts";
+export {default as SocialMediaService} from "./SocialMediaService.ts";
+export {
+  SocialMediaAgentConfigSchema,
+  SocialMediaConfigSchema,
+} from "./schema.ts";

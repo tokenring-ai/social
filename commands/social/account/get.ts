@@ -1,11 +1,15 @@
-import {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand,} from "@tokenring-ai/agent/types";
 import SocialMediaService from "../../../SocialMediaService.ts";
 import {SocialMediaState} from "../../../state/SocialMediaState.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-async function execute({agent}: AgentCommandInputType<typeof inputSchema>): Promise<string> {
-  const account = await agent.requireServiceByType(SocialMediaService).getCurrentAccount(agent);
+async function execute({
+                         agent,
+                       }: AgentCommandInputType<typeof inputSchema>): Promise<string> {
+  const account = await agent
+    .requireServiceByType(SocialMediaService)
+    .getCurrentAccount(agent);
   const lines = [
     `Provider: ${agent.getState(SocialMediaState).activeProvider ?? "(none)"}`,
     `Username: ${account.username}`,

@@ -1,5 +1,6 @@
-import {Agent} from "@tokenring-ai/agent";
+import type {Agent} from "@tokenring-ai/agent";
 import type {AgentCreationContext} from "@tokenring-ai/agent/types";
+import type {MaybePromise} from "bun";
 import {z} from "zod";
 
 export const SocialMediaAccountSchema = z.object({
@@ -84,13 +85,19 @@ export interface SocialMediaProvider {
 
   attach?(agent: Agent, creationContext: AgentCreationContext): void;
 
-  getAccount(agent: Agent): Promise<SocialMediaAccount>;
+  getAccount(agent: Agent): MaybePromise<SocialMediaAccount>;
 
-  getRecentPosts(filter: SocialMediaPostFilterOptions, agent: Agent): Promise<SocialMediaPost[]>;
+  getRecentPosts(
+    filter: SocialMediaPostFilterOptions,
+    agent: Agent,
+  ): MaybePromise<SocialMediaPost[]>;
 
-  getPostById(id: string, agent: Agent): Promise<SocialMediaPost>;
+  getPostById(id: string, agent: Agent): MaybePromise<SocialMediaPost>;
 
-  createPost(data: CreateSocialMediaPostData, agent: Agent): Promise<SocialMediaPost>;
+  createPost(
+    data: CreateSocialMediaPostData,
+    agent: Agent,
+  ): MaybePromise<SocialMediaPost>;
 
-  deletePost?(id: string, agent: Agent): Promise<void>;
+  deletePost?(id: string, agent: Agent): MaybePromise<void>;
 }
