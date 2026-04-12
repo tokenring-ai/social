@@ -1,5 +1,5 @@
 import type Agent from "@tokenring-ai/agent/Agent";
-import type {TokenRingToolDefinition} from "@tokenring-ai/chat/schema";
+import type {TokenRingToolDefinition, TokenRingToolResult} from "@tokenring-ai/chat/schema";
 import {z} from "zod";
 import SocialMediaService from "../SocialMediaService.ts";
 
@@ -9,7 +9,7 @@ const displayName = "Social/getRecentPosts";
 async function execute(
   {limit, includeReplies, includeReshares}: z.output<typeof inputSchema>,
   agent: Agent,
-) {
+): Promise<TokenRingToolResult> {
   const posts = await agent
     .requireServiceByType(SocialMediaService)
     .getRecentPosts(
@@ -21,10 +21,7 @@ async function execute(
       agent,
     );
 
-  return {
-    type: "json" as const,
-    data: {posts},
-  };
+  return JSON.stringify({ success: true, posts});
 }
 
 const inputSchema = z.object({

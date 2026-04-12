@@ -1,4 +1,4 @@
-import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand,} from "@tokenring-ai/agent/types";
+import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
 import {SocialMediaState} from "../../../state/SocialMediaState.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;

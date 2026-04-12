@@ -1,22 +1,16 @@
 import type Agent from "@tokenring-ai/agent/Agent";
-import type {TokenRingToolDefinition} from "@tokenring-ai/chat/schema";
+import type {TokenRingToolDefinition, TokenRingToolResult} from "@tokenring-ai/chat/schema";
 import {z} from "zod";
 import SocialMediaService from "../SocialMediaService.ts";
 
 const name = "social_selectPost";
 const displayName = "Social/selectPost";
 
-async function execute({id}: z.output<typeof inputSchema>, agent: Agent) {
+async function execute({id}: z.output<typeof inputSchema>, agent: Agent): Promise<TokenRingToolResult> {
   const post = await agent
     .requireServiceByType(SocialMediaService)
     .selectPostById(id, agent);
-  return {
-    type: "json" as const,
-    data: {
-      success: true,
-      post,
-    },
-  };
+  return JSON.stringify({success: true, post});
 }
 
 const inputSchema = z.object({

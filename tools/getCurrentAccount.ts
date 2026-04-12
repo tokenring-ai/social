@@ -1,16 +1,16 @@
 import type Agent from "@tokenring-ai/agent/Agent";
-import type {TokenRingToolDefinition} from "@tokenring-ai/chat/schema";
+import type {TokenRingToolDefinition, TokenRingToolResult} from "@tokenring-ai/chat/schema";
 import {z} from "zod";
 import SocialMediaService from "../SocialMediaService.ts";
 
 const name = "social_getCurrentAccount";
 const displayName = "Social/getCurrentAccount";
 
-async function execute(_args: z.output<typeof inputSchema>, agent: Agent) {
+async function execute(_args: z.output<typeof inputSchema>, agent: Agent): Promise<TokenRingToolResult> {
   const account = await agent
     .requireServiceByType(SocialMediaService)
     .getCurrentAccount(agent);
-  return {type: "json" as const, data: account};
+  return JSON.stringify(account);
 }
 
 const inputSchema = z.object({});
