@@ -115,6 +115,6 @@ export default class SocialMediaService implements TokenRingService {
     if (!currentPost)
       throw new Error("No social media post is currently selected");
     await provider.deletePost(currentPost.id, agent);
-    await this.clearCurrentPost(agent);
+    this.clearCurrentPost(agent);
   }
 }

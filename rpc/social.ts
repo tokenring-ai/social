@@ -89,11 +89,11 @@ export default createRPCEndpoint(SocialRpcSchema, {
     };
   },
 
-  async clearCurrentPost(args, app: TokenRingApp) {
+  clearCurrentPost(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
     if (!agent) throw new Error("Agent not found");
     const socialService = app.requireService(SocialMediaService);
-    await socialService.clearCurrentPost(agent);
+    socialService.clearCurrentPost(agent);
 
     return {
       success: true,
