@@ -21,8 +21,8 @@ export default class SocialMediaService implements TokenRingService {
 
   private providers = new KeyedRegistry<SocialMediaProvider>();
 
-  registerSocialMediaProvider = this.providers.register;
-  getAvailableProviders = this.providers.getAllItemNames;
+  registerSocialMediaProvider = this.providers.set;
+  getAvailableProviders = this.providers.keysArray;
 
   constructor(readonly options: z.output<typeof SocialMediaConfigSchema>) {
   }
@@ -33,7 +33,7 @@ export default class SocialMediaService implements TokenRingService {
       agent.getAgentConfigSlice("social", SocialMediaAgentConfigSchema),
     );
     const initialState = agent.initializeState(SocialMediaState, agentConfig);
-    for (const provider of this.providers.getAllItemValues()) {
+    for (const provider of this.providers.valuesArray()) {
       provider.attach?.(agent, creationContext);
     }
     creationContext.items.push(
@@ -45,7 +45,7 @@ export default class SocialMediaService implements TokenRingService {
     const activeProvider = agent.getState(SocialMediaState).activeProvider;
     if (!activeProvider)
       throw new Error("No social media provider is currently selected");
-    return this.providers.requireItemByName(activeProvider);
+    return this.providers.require(activeProvider);
   }
 
   setActiveProvider(name: string, agent: Agent): void {

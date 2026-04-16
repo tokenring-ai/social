@@ -103,7 +103,7 @@ export default {
     );
 
     app.waitForService(ChatService, (chatService) =>
-      chatService.addTools(tools),
+      chatService.addTools(...tools),
     );
     app.waitForService(AgentCommandService, (agentCommandService) =>
       agentCommandService.addAgentCommands(commands),
