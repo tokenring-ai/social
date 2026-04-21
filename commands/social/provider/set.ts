@@ -1,5 +1,5 @@
-import {CommandFailedError} from "@tokenring-ai/agent/AgentError";
-import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import { CommandFailedError } from "@tokenring-ai/agent/AgentError";
+import type { AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand } from "@tokenring-ai/agent/types";
 import SocialMediaService from "../../../SocialMediaService.ts";
 
 const inputSchema = {
@@ -13,14 +13,10 @@ const inputSchema = {
   ],
 } as const satisfies AgentCommandInputSchema;
 
-function execute({
-                   positionals,
-                   agent,
-                 }: AgentCommandInputType<typeof inputSchema>): string {
+function execute({ positionals, agent }: AgentCommandInputType<typeof inputSchema>): string {
   const socialService = agent.requireServiceByType(SocialMediaService);
   const providerName = positionals.name;
-  if (!providerName)
-    throw new CommandFailedError("Usage: /social provider set <name>");
+  if (!providerName) throw new CommandFailedError("Usage: /social provider set <name>");
 
   const available = socialService.getAvailableProviders();
   if (available.includes(providerName)) {

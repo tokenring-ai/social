@@ -1,11 +1,9 @@
-import type {AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand} from "@tokenring-ai/agent/types";
+import type { AgentCommandInputSchema, AgentCommandInputType, TokenRingAgentCommand } from "@tokenring-ai/agent/types";
 import SocialMediaService from "../../../SocialMediaService.ts";
 
 const inputSchema = {} as const satisfies AgentCommandInputSchema;
 
-function execute({
-                         agent,
-                       }: AgentCommandInputType<typeof inputSchema>) {
+function execute({ agent }: AgentCommandInputType<typeof inputSchema>) {
   agent.requireServiceByType(SocialMediaService).clearCurrentPost(agent);
   return "Post cleared. No social media post is currently selected.";
 }

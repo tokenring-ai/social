@@ -9,15 +9,4 @@ import providerReset from "./commands/social/provider/reset.ts";
 import providerSelect from "./commands/social/provider/select.ts";
 import providerSet from "./commands/social/provider/set.ts";
 
-export default [
-  providerGet,
-  providerSet,
-  providerSelect,
-  providerReset,
-  accountGet,
-  postList,
-  postGet,
-  postSelect,
-  postInfo,
-  postClear,
-];
+export default [providerGet, providerSet, providerSelect, providerReset, accountGet, postList, postGet, postSelect, postInfo, postClear];

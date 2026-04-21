@@ -15,7 +15,7 @@ export {
   SocialMediaMetricsSchema,
   SocialMediaPostSchema,
 } from "./SocialMediaProvider.ts";
-export {default as SocialMediaService} from "./SocialMediaService.ts";
+export { default as SocialMediaService } from "./SocialMediaService.ts";
 export {
   SocialMediaAgentConfigSchema,
   SocialMediaConfigSchema,

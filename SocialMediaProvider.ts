@@ -1,57 +1,57 @@
-import type {Agent} from "@tokenring-ai/agent";
-import type {AgentCreationContext} from "@tokenring-ai/agent/types";
-import type {MaybePromise} from "bun";
-import {z} from "zod";
+import type { Agent } from "@tokenring-ai/agent";
+import type { AgentCreationContext } from "@tokenring-ai/agent/types";
+import type { MaybePromise } from "bun";
+import { z } from "zod";
 
 export const SocialMediaAccountSchema = z.object({
   id: z.string(),
   username: z.string(),
-  displayName: z.string().optional(),
-  url: z.string().optional(),
-  description: z.string().optional(),
-  avatarUrl: z.string().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  displayName: z.string().exactOptional(),
+  url: z.string().exactOptional(),
+  description: z.string().exactOptional(),
+  avatarUrl: z.string().exactOptional(),
+  metadata: z.record(z.string(), z.unknown()).exactOptional(),
 });
 
 export const SocialMediaAuthorSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().exactOptional(),
   username: z.string(),
-  displayName: z.string().optional(),
-  url: z.string().optional(),
-  avatarUrl: z.string().optional(),
+  displayName: z.string().exactOptional(),
+  url: z.string().exactOptional(),
+  avatarUrl: z.string().exactOptional(),
 });
 
 export const SocialMediaMetricsSchema = z.object({
-  likes: z.number().optional(),
-  comments: z.number().optional(),
-  shares: z.number().optional(),
-  quotes: z.number().optional(),
-  impressions: z.number().optional(),
-  score: z.number().optional(),
+  likes: z.number().exactOptional(),
+  comments: z.number().exactOptional(),
+  shares: z.number().exactOptional(),
+  quotes: z.number().exactOptional(),
+  impressions: z.number().exactOptional(),
+  score: z.number().exactOptional(),
 });
 
 export const SocialMediaAttachmentSchema = z.object({
   type: z.enum(["image", "video", "link", "unknown"]),
-  url: z.string().optional(),
-  previewUrl: z.string().optional(),
-  altText: z.string().optional(),
+  url: z.string().exactOptional(),
+  previewUrl: z.string().exactOptional(),
+  altText: z.string().exactOptional(),
 });
 
 export const SocialMediaPostSchema = z.object({
   id: z.string(),
   platform: z.string(),
-  title: z.string().optional(),
+  title: z.string().exactOptional(),
   content: z.string(),
   status: z.enum(["published", "draft"]).default("published"),
-  url: z.string().optional(),
+  url: z.string().exactOptional(),
   author: SocialMediaAuthorSchema,
   createdAt: z.date(),
-  updatedAt: z.date().optional(),
-  publishedAt: z.date().optional(),
-  replyToPostId: z.string().optional(),
-  attachments: z.array(SocialMediaAttachmentSchema).optional(),
-  metrics: SocialMediaMetricsSchema.optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  updatedAt: z.date().exactOptional(),
+  publishedAt: z.date().exactOptional(),
+  replyToPostId: z.string().exactOptional(),
+  attachments: z.array(SocialMediaAttachmentSchema).exactOptional(),
+  metrics: SocialMediaMetricsSchema.exactOptional(),
+  metadata: z.record(z.string(), z.unknown()).exactOptional(),
 });
 
 export type SocialMediaAccount = z.infer<typeof SocialMediaAccountSchema>;
@@ -61,18 +61,18 @@ export type SocialMediaAttachment = z.infer<typeof SocialMediaAttachmentSchema>;
 export type SocialMediaPost = z.infer<typeof SocialMediaPostSchema>;
 
 export interface SocialMediaPostFilterOptions {
-  limit?: number;
-  since?: Date;
-  until?: Date;
-  includeReplies?: boolean;
-  includeReshares?: boolean;
+  limit?: number | undefined;
+  since?: Date | undefined;
+  until?: Date | undefined;
+  includeReplies?: boolean | undefined;
+  includeReshares?: boolean | undefined;
 }
 
 export interface CreateSocialMediaPostData {
-  title?: string;
+  title?: string | undefined;
   content: string;
-  replyToPostId?: string;
-  metadata?: Record<string, unknown>;
+  replyToPostId?: string | undefined;
+  metadata?: Record<string, unknown> | undefined;
 }
 
 /**
@@ -87,17 +87,11 @@ export interface SocialMediaProvider {
 
   getAccount(agent: Agent): MaybePromise<SocialMediaAccount>;
 
-  getRecentPosts(
-    filter: SocialMediaPostFilterOptions,
-    agent: Agent,
-  ): MaybePromise<SocialMediaPost[]>;
+  getRecentPosts(filter: SocialMediaPostFilterOptions, agent: Agent): MaybePromise<SocialMediaPost[]>;
 
   getPostById(id: string, agent: Agent): MaybePromise<SocialMediaPost>;
 
-  createPost(
-    data: CreateSocialMediaPostData,
-    agent: Agent,
-  ): MaybePromise<SocialMediaPost>;
+  createPost(data: CreateSocialMediaPostData, agent: Agent): MaybePromise<SocialMediaPost>;
 
   deletePost?(id: string, agent: Agent): MaybePromise<void>;
 }

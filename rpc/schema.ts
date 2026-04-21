@@ -1,56 +1,56 @@
-import type {RPCSchema} from "@tokenring-ai/rpc/types";
-import {z} from "zod";
-import {AgentNotFoundSchema} from "@tokenring-ai/agent/schema";
+import { AgentNotFoundSchema } from "@tokenring-ai/agent/schema";
+import type { RPCSchema } from "@tokenring-ai/rpc/types";
+import { z } from "zod";
 
 const SocialMediaAccountSchema = z.object({
   id: z.string(),
   username: z.string(),
-  displayName: z.string().optional(),
-  url: z.string().optional(),
-  description: z.string().optional(),
-  avatarUrl: z.string().optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  displayName: z.string().exactOptional(),
+  url: z.string().exactOptional(),
+  description: z.string().exactOptional(),
+  avatarUrl: z.string().exactOptional(),
+  metadata: z.record(z.string(), z.unknown()).exactOptional(),
 });
 
 const SocialMediaAuthorSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().exactOptional(),
   username: z.string(),
-  displayName: z.string().optional(),
-  url: z.string().optional(),
-  avatarUrl: z.string().optional(),
+  displayName: z.string().exactOptional(),
+  url: z.string().exactOptional(),
+  avatarUrl: z.string().exactOptional(),
 });
 
 const SocialMediaMetricsSchema = z.object({
-  likes: z.number().optional(),
-  comments: z.number().optional(),
-  shares: z.number().optional(),
-  quotes: z.number().optional(),
-  impressions: z.number().optional(),
-  score: z.number().optional(),
+  likes: z.number().exactOptional(),
+  comments: z.number().exactOptional(),
+  shares: z.number().exactOptional(),
+  quotes: z.number().exactOptional(),
+  impressions: z.number().exactOptional(),
+  score: z.number().exactOptional(),
 });
 
 const SocialMediaAttachmentSchema = z.object({
   type: z.enum(["image", "video", "link", "unknown"]),
-  url: z.string().optional(),
-  previewUrl: z.string().optional(),
-  altText: z.string().optional(),
+  url: z.string().exactOptional(),
+  previewUrl: z.string().exactOptional(),
+  altText: z.string().exactOptional(),
 });
 
 const SocialMediaPostSchema = z.object({
   id: z.string(),
   platform: z.string(),
-  title: z.string().optional(),
+  title: z.string().exactOptional(),
   content: z.string(),
   status: z.enum(["published", "draft"]),
-  url: z.string().optional(),
+  url: z.string().exactOptional(),
   author: SocialMediaAuthorSchema,
   createdAt: z.coerce.date(),
-  updatedAt: z.coerce.date().optional(),
-  publishedAt: z.coerce.date().optional(),
-  replyToPostId: z.string().optional(),
-  attachments: z.array(SocialMediaAttachmentSchema).optional(),
-  metrics: SocialMediaMetricsSchema.optional(),
-  metadata: z.record(z.string(), z.unknown()).optional(),
+  updatedAt: z.coerce.date().exactOptional(),
+  publishedAt: z.coerce.date().exactOptional(),
+  replyToPostId: z.string().exactOptional(),
+  attachments: z.array(SocialMediaAttachmentSchema).exactOptional(),
+  metrics: SocialMediaMetricsSchema.exactOptional(),
+  metadata: z.record(z.string(), z.unknown()).exactOptional(),
 });
 
 export default {
@@ -64,10 +64,10 @@ export default {
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           account: SocialMediaAccountSchema,
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     getCurrentPost: {
@@ -77,30 +77,30 @@ export default {
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           post: SocialMediaPostSchema.nullable(),
           message: z.string(),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     getRecentPosts: {
       type: "query",
       input: z.object({
         agentId: z.string(),
-        limit: z.number().int().positive().default(10).optional(),
-        includeReplies: z.boolean().default(false).optional(),
-        includeReshares: z.boolean().default(false).optional(),
+        limit: z.number().int().positive().default(10).exactOptional(),
+        includeReplies: z.boolean().default(false).exactOptional(),
+        includeReshares: z.boolean().default(false).exactOptional(),
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           posts: z.array(SocialMediaPostSchema),
           count: z.number(),
           currentlySelected: z.string().nullable(),
           message: z.string(),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     createPost: {
@@ -108,17 +108,17 @@ export default {
       input: z.object({
         agentId: z.string(),
         content: z.string(),
-        title: z.string().optional(),
-        replyToPostId: z.string().optional(),
-        metadata: z.record(z.string(), z.unknown()).optional(),
+        title: z.string().exactOptional(),
+        replyToPostId: z.string().exactOptional(),
+        metadata: z.record(z.string(), z.unknown()).exactOptional(),
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           post: SocialMediaPostSchema,
           message: z.string(),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     selectPostById: {
@@ -129,11 +129,11 @@ export default {
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           post: SocialMediaPostSchema,
           message: z.string(),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     clearCurrentPost: {
@@ -143,11 +143,11 @@ export default {
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           success: z.boolean(),
           message: z.string(),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     getActiveProvider: {
@@ -157,11 +157,11 @@ export default {
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           provider: z.string().nullable(),
           availableProviders: z.array(z.string()),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
     setActiveProvider: {
@@ -172,11 +172,11 @@ export default {
       }),
       result: z.discriminatedUnion("status", [
         z.object({
-          status: z.literal('success'),
+          status: z.literal("success"),
           success: z.boolean(),
           message: z.string(),
         }),
-        AgentNotFoundSchema
+        AgentNotFoundSchema,
       ]),
     },
   },

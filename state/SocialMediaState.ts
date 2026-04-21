@@ -1,25 +1,21 @@
-import type {Agent} from "@tokenring-ai/agent";
-import {AgentStateSlice} from "@tokenring-ai/agent/types";
-import {z} from "zod";
-import type {SocialMediaAgentConfigSchema} from "../schema.ts";
-import {type SocialMediaPost, SocialMediaPostSchema} from "../SocialMediaProvider.ts";
+import type { Agent } from "@tokenring-ai/agent";
+import { AgentStateSlice } from "@tokenring-ai/agent/types";
+import { z } from "zod";
+import { type SocialMediaPost, SocialMediaPostSchema } from "../SocialMediaProvider.ts";
+import type { SocialMediaAgentConfigSchema } from "../schema.ts";
 
 const serializationSchema = z
   .object({
     activeProvider: z.string().nullable(),
-    currentPost: SocialMediaPostSchema.nullable().optional(),
+    currentPost: SocialMediaPostSchema.nullable().exactOptional(),
   })
-  .prefault({activeProvider: null, currentPost: null});
+  .prefault({ activeProvider: null, currentPost: null });
 
-export class SocialMediaState extends AgentStateSlice<
-  typeof serializationSchema
-> {
+export class SocialMediaState extends AgentStateSlice<typeof serializationSchema> {
   activeProvider: string | null;
   currentPost: SocialMediaPost | null;
 
-  constructor(
-    readonly initialConfig: z.output<typeof SocialMediaAgentConfigSchema>,
-  ) {
+  constructor(readonly initialConfig: z.output<typeof SocialMediaAgentConfigSchema>) {
     super("SocialMediaState", serializationSchema);
     this.activeProvider = initialConfig.provider ?? null;
     this.currentPost = null;
