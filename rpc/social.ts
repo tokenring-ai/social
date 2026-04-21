@@ -8,28 +8,35 @@ import SocialRpcSchema from "./schema.ts";
 export default createRPCEndpoint(SocialRpcSchema, {
   async getCurrentAccount(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
 
     return {
+      status: 'success',
       account: await socialService.getCurrentAccount(agent),
     };
   },
 
   getCurrentPost(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     const post = socialService.getCurrentPost(agent);
 
     if (!post) {
       return {
+        status: 'success',
         post: null,
         message: "No social media post is currently selected",
       };
     }
 
     return {
+      status: 'success',
       post,
       message: `Currently selected social post: ${post.id}`,
     };
@@ -37,7 +44,9 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
   async getRecentPosts(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     const posts = await socialService.getRecentPosts(
       {
@@ -50,6 +59,7 @@ export default createRPCEndpoint(SocialRpcSchema, {
     const currentPost = socialService.getCurrentPost(agent);
 
     return {
+      status: 'success',
       posts,
       count: posts.length,
       currentlySelected: currentPost?.id ?? null,
@@ -59,7 +69,9 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
   async createPost(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     const post = await socialService.createPost(
       {
@@ -72,6 +84,7 @@ export default createRPCEndpoint(SocialRpcSchema, {
     );
 
     return {
+      status: 'success',
       post,
       message: `Social post created with ID: ${post.id}`,
     };
@@ -79,11 +92,14 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
   async selectPostById(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     const post = await socialService.selectPostById(args.id, agent);
 
     return {
+      status: 'success',
       post,
       message: `Selected social post: ${post.id}`,
     };
@@ -91,11 +107,14 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
   clearCurrentPost(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     socialService.clearCurrentPost(agent);
 
     return {
+      status: 'success',
       success: true,
       message:
         "Post selection cleared. No social media post is currently selected.",
@@ -104,12 +123,15 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
   getActiveProvider(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     const availableProviders = socialService.getAvailableProviders();
     const provider = agent.getState(SocialMediaState).activeProvider ?? null;
 
     return {
+      status: 'success',
       provider,
       availableProviders,
     };
@@ -117,12 +139,15 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
   setActiveProvider(args, app: TokenRingApp) {
     const agent = app.requireService(AgentManager).getAgent(args.agentId);
-    if (!agent) throw new Error("Agent not found");
+    if (!agent) {
+      return {status: 'agentNotFound'};
+    }
     const socialService = app.requireService(SocialMediaService);
     const availableProviders = socialService.getAvailableProviders();
 
     if (!availableProviders.includes(args.name)) {
       return {
+        status: 'success',
         success: false,
         message: `Provider "${args.name}" not found. Available providers: ${availableProviders.join(", ")}`,
       };
@@ -130,6 +155,7 @@ export default createRPCEndpoint(SocialRpcSchema, {
 
     socialService.setActiveProvider(args.name, agent);
     return {
+      status: 'success',
       success: true,
       message: `Active provider set to: ${args.name}`,
     };

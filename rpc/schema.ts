@@ -1,5 +1,6 @@
 import type {RPCSchema} from "@tokenring-ai/rpc/types";
 import {z} from "zod";
+import {AgentNotFoundSchema} from "@tokenring-ai/agent/schema";
 
 const SocialMediaAccountSchema = z.object({
   id: z.string(),
@@ -61,19 +62,27 @@ export default {
       input: z.object({
         agentId: z.string(),
       }),
-      result: z.object({
-        account: SocialMediaAccountSchema,
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          account: SocialMediaAccountSchema,
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     getCurrentPost: {
       type: "query",
       input: z.object({
         agentId: z.string(),
       }),
-      result: z.object({
-        post: SocialMediaPostSchema.nullable(),
-        message: z.string(),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          post: SocialMediaPostSchema.nullable(),
+          message: z.string(),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     getRecentPosts: {
       type: "query",
@@ -83,12 +92,16 @@ export default {
         includeReplies: z.boolean().default(false).optional(),
         includeReshares: z.boolean().default(false).optional(),
       }),
-      result: z.object({
-        posts: z.array(SocialMediaPostSchema),
-        count: z.number(),
-        currentlySelected: z.string().nullable(),
-        message: z.string(),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          posts: z.array(SocialMediaPostSchema),
+          count: z.number(),
+          currentlySelected: z.string().nullable(),
+          message: z.string(),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     createPost: {
       type: "mutation",
@@ -99,10 +112,14 @@ export default {
         replyToPostId: z.string().optional(),
         metadata: z.record(z.string(), z.unknown()).optional(),
       }),
-      result: z.object({
-        post: SocialMediaPostSchema,
-        message: z.string(),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          post: SocialMediaPostSchema,
+          message: z.string(),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     selectPostById: {
       type: "mutation",
@@ -110,30 +127,42 @@ export default {
         agentId: z.string(),
         id: z.string(),
       }),
-      result: z.object({
-        post: SocialMediaPostSchema,
-        message: z.string(),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          post: SocialMediaPostSchema,
+          message: z.string(),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     clearCurrentPost: {
       type: "mutation",
       input: z.object({
         agentId: z.string(),
       }),
-      result: z.object({
-        success: z.boolean(),
-        message: z.string(),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          success: z.boolean(),
+          message: z.string(),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     getActiveProvider: {
       type: "query",
       input: z.object({
         agentId: z.string(),
       }),
-      result: z.object({
-        provider: z.string().nullable(),
-        availableProviders: z.array(z.string()),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          provider: z.string().nullable(),
+          availableProviders: z.array(z.string()),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
     setActiveProvider: {
       type: "mutation",
@@ -141,10 +170,14 @@ export default {
         agentId: z.string(),
         name: z.string(),
       }),
-      result: z.object({
-        success: z.boolean(),
-        message: z.string(),
-      }),
+      result: z.discriminatedUnion("status", [
+        z.object({
+          status: z.literal('success'),
+          success: z.boolean(),
+          message: z.string(),
+        }),
+        AgentNotFoundSchema
+      ]),
     },
   },
 } satisfies RPCSchema;
