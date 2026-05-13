@@ -1,6 +1,6 @@
-import {Agent} from "@tokenring-ai/agent";
+import { Agent } from "@tokenring-ai/agent";
 import TokenRingApp from "@tokenring-ai/app";
-import {SocialMediaConfigSchema} from "../../schema.ts";
+import { SocialMediaConfigSchema } from "../../schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -22,7 +22,7 @@ class TestSocialProvider implements SocialMediaProvider {
         title: "First",
         content: "First post",
         status: "published",
-        author: {id: "acct-1", username: "tester"},
+        author: { id: "acct-1", username: "tester" },
         createdAt: new Date("2025-01-01T00:00:00.000Z"),
       },
       {
@@ -31,7 +31,7 @@ class TestSocialProvider implements SocialMediaProvider {
         title: "Second",
         content: "Second post",
         status: "published",
-        author: {id: "acct-1", username: "tester"},
+        author: { id: "acct-1", username: "tester" },
         createdAt: new Date("2025-01-02T00:00:00.000Z"),
       },
     ];
@@ -63,7 +63,7 @@ class TestSocialProvider implements SocialMediaProvider {
       title: data.title,
       content: data.content,
       status: "published",
-      author: {id: "acct-1", username: "tester"},
+      author: { id: "acct-1", username: "tester" },
       createdAt: new Date("2025-01-03T00:00:00.000Z"),
       replyToPostId: data.replyToPostId,
       metadata: data.metadata,
@@ -86,5 +86,5 @@ export default function createTestSocialService(app: TokenRingApp) {
     socialService.registerSocialMediaProvider("test", new TestSocialProvider());
   }
 
-  return {socialService};
+  return { socialService };
 }

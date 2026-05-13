@@ -1,8 +1,8 @@
-import {Agent} from "@tokenring-ai/agent";
-import {beforeEach, describe, expect, it} from "vitest";
+import { Agent } from "@tokenring-ai/agent";
+import { beforeEach, describe, expect, it } from "vitest";
 import createTestingAgent from "../../agent/test/createTestingAgent.ts";
 import createTestingApp from "../../app/test/createTestingApp.ts";
-import {SocialMediaConfigSchema} from "../schema.ts";
+import { SocialMediaConfigSchema } from "../schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -11,7 +11,7 @@ import type {
   SocialMediaProvider,
 } from "../SocialMediaProvider.ts";
 import SocialMediaService from "../SocialMediaService.ts";
-import {SocialMediaState} from "../state/SocialMediaState.ts";
+import { SocialMediaState } from "../state/SocialMediaState.ts";
 
 class TestSocialProvider implements SocialMediaProvider {
   description = "Test social provider";
@@ -22,7 +22,7 @@ class TestSocialProvider implements SocialMediaProvider {
       platform: "test",
       content: "First post",
       status: "published",
-      author: {id: "acct-1", username: "tester"},
+      author: { id: "acct-1", username: "tester" },
       createdAt: new Date("2025-01-01T00:00:00.000Z"),
     },
     {
@@ -31,7 +31,7 @@ class TestSocialProvider implements SocialMediaProvider {
       title: "Second",
       content: "Second post",
       status: "published",
-      author: {id: "acct-1", username: "tester"},
+      author: { id: "acct-1", username: "tester" },
       createdAt: new Date("2025-01-02T00:00:00.000Z"),
     },
   ];
@@ -62,7 +62,7 @@ class TestSocialProvider implements SocialMediaProvider {
       title: data.title,
       content: data.content,
       status: "published",
-      author: {id: "acct-1", username: "tester"},
+      author: { id: "acct-1", username: "tester" },
       createdAt: new Date("2025-01-03T00:00:00.000Z"),
       replyToPostId: data.replyToPostId,
       metadata: data.metadata,
@@ -87,7 +87,7 @@ describe("SocialMediaService", () => {
     }));
     service.registerSocialMediaProvider("test", new TestSocialProvider());
     app.addServices(service);
-    service.attach(agent, {items: []});
+    service.attach(agent, { items: [] });
   });
 
   it("reads the active provider from agent state", () => {
@@ -101,7 +101,7 @@ describe("SocialMediaService", () => {
   });
 
   it("creates a post and stores it as the current post", async () => {
-    const post = await service.createPost({content: "hello world"}, agent);
+    const post = await service.createPost({ content: "hello world" }, agent);
     expect(post.content).toBe("hello world");
     expect(service.getCurrentPost(agent)?.id).toBe(post.id);
   });
