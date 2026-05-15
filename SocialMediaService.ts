@@ -1,7 +1,7 @@
 import type Agent from "@tokenring-ai/agent/Agent";
 import type { AgentCreationContext } from "@tokenring-ai/agent/types";
 import type { TokenRingService } from "@tokenring-ai/app/types";
-import deepMerge from "@tokenring-ai/utility/object/deepMerge";
+import deepClone from "@tokenring-ai/utility/object/deepClone";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
 import type { z } from "zod";
 import type {
@@ -26,7 +26,7 @@ export default class SocialMediaService implements TokenRingService {
   constructor(readonly options: z.output<typeof SocialMediaConfigSchema>) {}
 
   attach(agent: Agent, creationContext: AgentCreationContext): void {
-    const agentConfig = deepMerge(this.options.agentDefaults, agent.getAgentConfigSlice("social", SocialMediaAgentConfigSchema));
+    const agentConfig = deepClone(this.options.agentDefaults, agent.getAgentConfigSlice("social", SocialMediaAgentConfigSchema));
     const initialState = agent.initializeState(SocialMediaState, agentConfig);
     for (const provider of this.providers.valuesArray()) {
       provider.attach?.(agent, creationContext);

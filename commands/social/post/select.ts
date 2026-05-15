@@ -47,7 +47,7 @@ async function execute({ agent }: AgentCommandInputType<typeof inputSchema>): Pr
     const post = await socialService.selectPostById(selection[0], agent);
     return `Selected social media post: ${post.id}`;
   } catch (error: unknown) {
-    throw new CommandFailedError(`Error during social post selection: ${error instanceof Error ? error.message : String(error)}`);
+    throw new CommandFailedError(`Error during social post selection: ${Error.isError(error) ? error.message : String(error)}`);
   }
 }
 

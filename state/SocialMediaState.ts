@@ -1,5 +1,6 @@
 import type { Agent } from "@tokenring-ai/agent";
 import { AgentStateSlice } from "@tokenring-ai/agent/types";
+import deepClone from "@tokenring-ai/utility/object/deepClone";
 import { z } from "zod";
 import { type SocialMediaPost, SocialMediaPostSchema } from "../SocialMediaProvider.ts";
 import type { SocialMediaAgentConfigSchema } from "../schema.ts";
@@ -24,7 +25,7 @@ export class SocialMediaState extends AgentStateSlice<typeof serializationSchema
   transferStateFromParent(parent: Agent): void {
     const parentState = parent.getState(SocialMediaState);
     this.activeProvider ??= parentState.activeProvider;
-    this.currentPost ??= parentState.currentPost;
+    this.currentPost ??= deepClone(parentState.currentPost);
   }
 
   serialize(): z.output<typeof serializationSchema> {
