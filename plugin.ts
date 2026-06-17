@@ -9,6 +9,7 @@ import commands from "./commands.ts";
 import { SocialMediaConfigSchema } from "./index.ts";
 import packageJSON from "./package.json" with { type: "json" };
 import socialRPC from "./rpc/social.ts";
+import { SocialMediaPostMetadataSchema } from "./schema.ts";
 import SocialMediaService from "./SocialMediaService.ts";
 import tools from "./tools.ts";
 
@@ -55,7 +56,7 @@ export default {
         type: "native",
         params: ["content", "title", "replyToPostId", "metadataJson"],
         async execute(this: ScriptingThis, content: string, title?: string, replyToPostId?: string, metadataJson?: string): Promise<string> {
-          const metadata = metadataJson ? JSON.parse(metadataJson) : undefined;
+          const metadata = metadataJson ? SocialMediaPostMetadataSchema.parse(JSON.parse(metadataJson)) : undefined;
           const post = await this.agent.requireServiceByType(SocialMediaService).createPost(
             {
               content,

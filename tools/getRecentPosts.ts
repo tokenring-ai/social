@@ -20,9 +20,9 @@ async function execute({ limit, includeReplies, includeReshares }: z.output<type
 }
 
 const inputSchema = z.object({
-  limit: z.number().int().positive().max(100).default(20).exactOptional(),
-  includeReplies: z.boolean().default(false).exactOptional(),
-  includeReshares: z.boolean().default(false).exactOptional(),
+  limit: z.number().int().positive().max(100).default(20),
+  includeReplies: z.boolean().default(false),
+  includeReshares: z.boolean().default(false),
 });
 
 export default {
