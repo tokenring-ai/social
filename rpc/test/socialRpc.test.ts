@@ -1,11 +1,11 @@
 import { Agent, AgentManager } from "@tokenring-ai/agent";
-import createTestingAgent from "@tokenring-ai/agent/test/createTestingAgent";
+import createTestingAgent from "@tokenring-ai/agent/test/createTestingAgent.test";
 import TokenRingApp from "@tokenring-ai/app";
-import createTestingApp from "@tokenring-ai/app/test/createTestingApp";
+import createTestingApp from "@tokenring-ai/app/test/createTestingApp.test";
 import { beforeEach, describe, expect, it } from "vitest";
 import { SocialMediaState } from "../../state/SocialMediaState.ts";
 import socialRPC from "../social.ts";
-import createTestSocialService from "./createTestSocialService.ts";
+import createTestSocialService from "./createTestSocialService.test.ts";
 
 describe("Social RPC Endpoints", () => {
   let app: TokenRingApp;

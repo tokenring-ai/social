@@ -1,7 +1,7 @@
 import { Agent } from "@tokenring-ai/agent";
 import { beforeEach, describe, expect, it } from "vitest";
-import createTestingAgent from "../../agent/test/createTestingAgent.ts";
-import createTestingApp from "../../app/test/createTestingApp.ts";
+import createTestingAgent from "@tokenring-ai/agent/test/createTestingAgent.test";
+import createTestingApp from "@tokenring-ai/app/test/createTestingApp";
 import { SocialMediaConfigSchema } from "../schema.ts";
 import type {
   CreateSocialMediaPostData,
