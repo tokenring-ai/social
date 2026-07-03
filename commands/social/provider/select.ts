@@ -9,7 +9,7 @@ async function execute({ agent }: AgentCommandInputType<typeof inputSchema>): Pr
   const socialService = agent.requireServiceByType(SocialMediaService);
   const available = socialService.getAvailableProviders();
   if (available.length === 0) return "No social media providers are registered.";
-  if (available.length === 1) {
+  if (available.length === 1 && available[0]) {
     socialService.setActiveProvider(available[0], agent);
     return `Only one provider configured, auto-selecting: ${available[0]}`;
   }
@@ -33,7 +33,7 @@ async function execute({ agent }: AgentCommandInputType<typeof inputSchema>): Pr
     },
   });
 
-  if (!selection) return "Provider selection cancelled.";
+  if (!selection?.[0]) return "Provider selection cancelled.";
 
   socialService.setActiveProvider(selection[0], agent);
   return `Active provider set to: ${selection[0]}`;

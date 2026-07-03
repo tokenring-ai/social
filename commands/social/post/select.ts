@@ -42,7 +42,7 @@ async function execute({ agent }: AgentCommandInputType<typeof inputSchema>): Pr
       },
     });
 
-    if (!selection) return "Post selection cancelled.";
+    if (!selection?.[0]) return "Post selection cancelled.";
 
     const post = await socialService.selectPostById(selection[0], agent);
     return `Selected social media post: ${post.id}`;

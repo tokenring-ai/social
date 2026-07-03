@@ -1,4 +1,4 @@
-import { AgentNotFoundSchema } from "@tokenring-ai/agent/schema";
+import { AgentNotFoundSchema, SuccessSchema } from "@tokenring-ai/rpc/types";
 import type { RPCSchema } from "@tokenring-ai/rpc/types";
 import { z } from "zod";
 
@@ -63,8 +63,7 @@ export default {
         agentId: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           account: SocialMediaAccountSchema,
         }),
         AgentNotFoundSchema,
@@ -76,8 +75,7 @@ export default {
         agentId: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           post: SocialMediaPostSchema.nullable(),
           message: z.string(),
         }),
@@ -93,8 +91,7 @@ export default {
         includeReshares: z.boolean().default(false).exactOptional(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           posts: z.array(SocialMediaPostSchema),
           count: z.number(),
           currentlySelected: z.string().nullable(),
@@ -113,8 +110,7 @@ export default {
         metadata: z.record(z.string(), z.unknown()).exactOptional(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           post: SocialMediaPostSchema,
           message: z.string(),
         }),
@@ -128,8 +124,7 @@ export default {
         id: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           post: SocialMediaPostSchema,
           message: z.string(),
         }),
@@ -142,8 +137,7 @@ export default {
         agentId: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           success: z.boolean(),
           message: z.string(),
         }),
@@ -156,8 +150,7 @@ export default {
         agentId: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           provider: z.string().nullable(),
           availableProviders: z.array(z.string()),
         }),
@@ -171,8 +164,7 @@ export default {
         name: z.string(),
       }),
       result: z.discriminatedUnion("status", [
-        z.object({
-          status: z.literal("success"),
+        SuccessSchema.extend({
           success: z.boolean(),
           message: z.string(),
         }),
