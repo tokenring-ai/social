@@ -9,8 +9,8 @@ import commands from "./commands.ts";
 import { SocialMediaConfigSchema } from "./index.ts";
 import packageJSON from "./package.json" with { type: "json" };
 import socialRPC from "./rpc/social.ts";
-import { SocialMediaPostMetadataSchema } from "./schema.ts";
 import SocialMediaService from "./SocialMediaService.ts";
+import { SocialMediaPostMetadataSchema } from "./schema.ts";
 import tools from "./tools.ts";
 
 const packageConfigSchema = z.object({

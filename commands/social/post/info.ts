@@ -28,7 +28,6 @@ function execute({ agent }: AgentCommandInputType<typeof inputSchema>): string {
   if (currentPost.url) lines.push(`URL: ${currentPost.url}`);
   if (currentPost.metrics) {
     const metrics = Object.entries(currentPost.metrics)
-      .filter(([, value]) => value !== undefined)
       .map(([key, value]) => `${key}=${value}`)
       .join(", ");
     if (metrics) lines.push(`Metrics: ${metrics}`);

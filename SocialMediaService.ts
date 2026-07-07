@@ -1,10 +1,10 @@
 import type Agent from "@tokenring-ai/agent/Agent";
 import type { AgentCreationContext } from "@tokenring-ai/agent/types";
 import type { TokenRingService } from "@tokenring-ai/app/types";
+import { ConfigurationError } from "@tokenring-ai/app/types";
 import deepClone from "@tokenring-ai/utility/object/deepClone";
 import KeyedRegistry from "@tokenring-ai/utility/registry/KeyedRegistry";
 import type { z } from "zod";
-import { SocialMediaAgentConfigSchema, type SocialMediaConfigSchema } from "./schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -12,6 +12,7 @@ import type {
   SocialMediaPostFilterOptions,
   SocialMediaProvider,
 } from "./SocialMediaProvider.ts";
+import { SocialMediaAgentConfigSchema, type SocialMediaConfigSchema } from "./schema.ts";
 import { SocialMediaState } from "./state/SocialMediaState.ts";
 
 export default class SocialMediaService implements TokenRingService {
@@ -36,7 +37,7 @@ export default class SocialMediaService implements TokenRingService {
 
   requireActiveProvider(agent: Agent): SocialMediaProvider {
     const activeProvider = agent.getState(SocialMediaState).activeProvider;
-    if (!activeProvider) throw new Error("No social media provider is currently selected");
+    if (!activeProvider) throw new ConfigurationError(this.name, "No social media provider is currently selected");
     return this.providers.require(activeProvider);
   }
 
@@ -87,10 +88,10 @@ export default class SocialMediaService implements TokenRingService {
   async deleteCurrentPost(agent: Agent): Promise<void> {
     const provider = this.requireActiveProvider(agent);
     if (!provider.deletePost) {
-      throw new Error("The active social media provider does not support deleting posts");
+      throw new ConfigurationError(this.name, "The active social media provider does not support deleting posts");
     }
     const currentPost = this.getCurrentPost(agent);
-    if (!currentPost) throw new Error("No social media post is currently selected");
+    if (!currentPost) throw new ConfigurationError(this.name, "No social media post is currently selected");
     await provider.deletePost(currentPost.id, agent);
     this.clearCurrentPost(agent);
   }

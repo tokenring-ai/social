@@ -1,5 +1,6 @@
 import type Agent from "@tokenring-ai/agent/Agent";
 import type { TokenRingToolDefinition, TokenRingToolResult } from "@tokenring-ai/chat/schema";
+import { ToolCallError } from "@tokenring-ai/chat/util/tokenRingTool";
 import { z } from "zod";
 import SocialMediaService from "../SocialMediaService.ts";
 
@@ -9,7 +10,7 @@ const displayName = "Social/getCurrentPost";
 function execute(_args: z.output<typeof inputSchema>, agent: Agent): TokenRingToolResult {
   const currentPost = agent.requireServiceByType(SocialMediaService).getCurrentPost(agent);
   if (!currentPost) {
-    throw new Error("No social media post currently selected");
+    throw new ToolCallError(name, "No social media post currently selected");
   }
 
   return JSON.stringify({

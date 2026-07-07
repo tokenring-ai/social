@@ -2,8 +2,8 @@ import type { Agent } from "@tokenring-ai/agent";
 import { AgentStateSlice } from "@tokenring-ai/agent/types";
 import deepClone from "@tokenring-ai/utility/object/deepClone";
 import { z } from "zod";
-import type { SocialMediaAgentConfigSchema } from "../schema.ts";
 import { type SocialMediaPost, SocialMediaPostSchema } from "../SocialMediaProvider.ts";
+import type { SocialMediaAgentConfigSchema } from "../schema.ts";
 
 const serializationSchema = z
   .object({

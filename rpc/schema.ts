@@ -1,5 +1,5 @@
-import { AgentNotFoundSchema, SuccessSchema } from "@tokenring-ai/rpc/types";
 import type { RPCSchema } from "@tokenring-ai/rpc/types";
+import { AgentNotFoundSchema, SuccessSchema } from "@tokenring-ai/rpc/types";
 import { z } from "zod";
 
 const SocialMediaAccountSchema = z.object({
