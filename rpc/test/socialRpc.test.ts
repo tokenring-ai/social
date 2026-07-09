@@ -11,6 +11,7 @@ describe("Social RPC Endpoints", () => {
   let app: TokenRingApp;
   let agentManager: AgentManager;
   let agent: Agent;
+  let methods: (typeof socialRPC)["methods"];
 
   beforeEach(() => {
     app = createTestingApp();
@@ -24,74 +25,100 @@ describe("Social RPC Endpoints", () => {
     agent.mutateState(SocialMediaState, state => {
       state.activeProvider = "test";
     });
+
+    methods = socialRPC.methods;
   });
 
   it("gets the current account", async () => {
-    const result = await socialRPC.methods.getCurrentAccount.execute({ agentId: agent.id }, app);
-    expect(result.account.username).toBe("tester");
+    const result = await methods.getCurrentAccount.execute({ agentId: agent.id }, app);
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.account.username).toBe("tester");
+    }
   });
 
   it("returns null when no post is selected", async () => {
-    const result = await socialRPC.methods.getCurrentPost.execute({ agentId: agent.id }, app);
-    expect(result.post).toBeNull();
-    expect(result.message).toContain("No social media post");
+    const result = await methods.getCurrentPost.execute({ agentId: agent.id }, app);
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.post).toBeNull();
+      expect(result.message).toContain("No social media post");
+    }
   });
 
   it("lists recent posts", async () => {
-    const result = await socialRPC.methods.getRecentPosts.execute({ agentId: agent.id, limit: 1 }, app);
-    expect(result.posts).toHaveLength(1);
-    expect(result.count).toBe(1);
+    const result = await methods.getRecentPosts.execute({ agentId: agent.id, limit: 1 }, app);
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.posts).toHaveLength(1);
+      expect(result.count).toBe(1);
+    }
   });
 
   it("creates a post", async () => {
-    const result = await socialRPC.methods.createPost.execute({
+    const result = await methods.createPost.execute({
       agentId: agent.id,
       content: "Hello world",
       title: "Greeting",
     }, app);
 
-    expect(result.post.id).toBeTruthy();
-    expect(result.post.content).toBe("Hello world");
-    expect(result.message).toContain("Social post created");
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.post.id).toBeTruthy();
+      expect(result.post.content).toBe("Hello world");
+      expect(result.message).toContain("Social post created");
+    }
   });
 
   it("selects a post by ID", async () => {
-    const result = await socialRPC.methods.selectPostById.execute({
+    const result = await methods.selectPostById.execute({
       agentId: agent.id,
       id: "post-2",
     }, app);
 
-    expect(result.post.id).toBe("post-2");
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.post.id).toBe("post-2");
+    }
     expect(agent.getState(SocialMediaState).currentPost?.id).toBe("post-2");
   });
 
   it("clears the current post", async () => {
-    await socialRPC.methods.selectPostById.execute({ agentId: agent.id, id: "post-1" }, app);
-    const result = await socialRPC.methods.clearCurrentPost.execute({ agentId: agent.id }, app);
+    await methods.selectPostById.execute({ agentId: agent.id, id: "post-1" }, app);
+    const result = await methods.clearCurrentPost.execute({ agentId: agent.id }, app);
 
-    expect(result.success).toBe(true);
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.success).toBe(true);
+    }
     expect(agent.getState(SocialMediaState).currentPost).toBeNull();
   });
 
   it("gets the active provider", async () => {
-    const result = await socialRPC.methods.getActiveProvider.execute({ agentId: agent.id }, app);
-    expect(result.provider).toBe("test");
-    expect(result.availableProviders).toContain("test");
+    const result = await methods.getActiveProvider.execute({ agentId: agent.id }, app);
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.provider).toBe("test");
+      expect(result.availableProviders).toContain("test");
+    }
   });
 
   it("sets the active provider", async () => {
-    const result = await socialRPC.methods.setActiveProvider.execute({
+    const result = await methods.setActiveProvider.execute({
       agentId: agent.id,
       name: "test",
     }, app);
 
-    expect(result.success).toBe(true);
-    expect(result.message).toContain("Active provider set");
+    expect(result.status).toBe("success");
+    if (result.status === "success") {
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("Active provider set");
+    }
   });
 
   it("throws when agent is missing", async () => {
     await expect(
-      socialRPC.methods.getCurrentAccount.execute({ agentId: "missing" }, app),
+      methods.getCurrentAccount.execute({ agentId: "missing" }, app),
     ).rejects.toThrow("Agent not found");
   });
 });

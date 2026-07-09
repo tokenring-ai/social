@@ -1,7 +1,7 @@
 import { Agent } from "@tokenring-ai/agent";
 import { beforeEach, describe, expect, it } from "vitest";
 import createTestingAgent from "@tokenring-ai/agent/test/createTestingAgent.test";
-import createTestingApp from "@tokenring-ai/app/test/createTestingApp";
+import createTestingApp from "@tokenring-ai/app/test/createTestingApp.test";
 import { SocialMediaConfigSchema } from "../schema.ts";
 import type {
   CreateSocialMediaPostData,
@@ -59,13 +59,13 @@ class TestSocialProvider implements SocialMediaProvider {
     const created: SocialMediaPost = {
       id: `post-${this.posts.length + 1}`,
       platform: "test",
-      title: data.title,
       content: data.content,
       status: "published",
       author: { id: "acct-1", username: "tester" },
       createdAt: new Date("2025-01-03T00:00:00.000Z"),
-      replyToPostId: data.replyToPostId,
-      metadata: data.metadata,
+      ...(data.title !== undefined && { title: data.title }),
+      ...(data.replyToPostId !== undefined && { replyToPostId: data.replyToPostId }),
+      ...(data.metadata !== undefined && { metadata: data.metadata }),
     };
     this.posts.unshift(created);
     return created;
