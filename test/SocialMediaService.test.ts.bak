@@ -1,7 +1,8 @@
+import { Agent } from "@tokenring-ai/agent";
 import { beforeEach, describe, expect, it } from "bun:test";
-import type { Agent } from "@tokenring-ai/agent";
 import createTestingAgent from "@tokenring-ai/agent/test/createTestingAgent.test";
 import createTestingApp from "@tokenring-ai/app/test/createTestingApp.test";
+import { SocialMediaConfigSchema } from "../schema.ts";
 import type {
   CreateSocialMediaPostData,
   SocialMediaAccount,
@@ -10,7 +11,6 @@ import type {
   SocialMediaProvider,
 } from "../SocialMediaProvider.ts";
 import SocialMediaService from "../SocialMediaService.ts";
-import { SocialMediaConfigSchema } from "../schema.ts";
 import { SocialMediaState } from "../state/SocialMediaState.ts";
 
 class TestSocialProvider implements SocialMediaProvider {
@@ -80,13 +80,11 @@ describe("SocialMediaService", () => {
   beforeEach(() => {
     app = createTestingApp();
     agent = createTestingAgent(app);
-    service = new SocialMediaService(
-      SocialMediaConfigSchema.parse({
-        agentDefaults: {
-          provider: "test",
-        },
-      }),
-    );
+    service = new SocialMediaService(SocialMediaConfigSchema.parse({
+      agentDefaults: {
+        provider: "test",
+      },
+    }));
     service.registerSocialMediaProvider("test", new TestSocialProvider());
     app.addServices(service);
     service.attach(agent, { items: [] });
@@ -116,7 +114,7 @@ describe("SocialMediaService", () => {
 
   it("clears the current post", async () => {
     await service.selectPostById("post-1", agent);
-    service.clearCurrentPost(agent);
+    await service.clearCurrentPost(agent);
     expect(service.getCurrentPost(agent)).toBeNull();
   });
 });

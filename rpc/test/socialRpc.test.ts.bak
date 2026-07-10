@@ -1,8 +1,8 @@
-import { beforeEach, describe, expect, it } from "bun:test";
-import { type Agent, AgentManager } from "@tokenring-ai/agent";
+import { Agent, AgentManager } from "@tokenring-ai/agent";
 import createTestingAgent from "@tokenring-ai/agent/test/createTestingAgent.test";
-import type TokenRingApp from "@tokenring-ai/app";
+import TokenRingApp from "@tokenring-ai/app";
 import createTestingApp from "@tokenring-ai/app/test/createTestingApp.test";
+import { beforeEach, describe, expect, it } from "bun:test";
 import { SocialMediaState } from "../../state/SocialMediaState.ts";
 import socialRPC from "../social.ts";
 import createTestSocialService from "./createTestSocialService.test.ts";
@@ -56,14 +56,11 @@ describe("Social RPC Endpoints", () => {
   });
 
   it("creates a post", async () => {
-    const result = await methods.createPost.execute(
-      {
-        agentId: agent.id,
-        content: "Hello world",
-        title: "Greeting",
-      },
-      app,
-    );
+    const result = await methods.createPost.execute({
+      agentId: agent.id,
+      content: "Hello world",
+      title: "Greeting",
+    }, app);
 
     expect(result.status).toBe("success");
     if (result.status === "success") {
@@ -74,13 +71,10 @@ describe("Social RPC Endpoints", () => {
   });
 
   it("selects a post by ID", async () => {
-    const result = await methods.selectPostById.execute(
-      {
-        agentId: agent.id,
-        id: "post-2",
-      },
-      app,
-    );
+    const result = await methods.selectPostById.execute({
+      agentId: agent.id,
+      id: "post-2",
+    }, app);
 
     expect(result.status).toBe("success");
     if (result.status === "success") {
@@ -110,13 +104,10 @@ describe("Social RPC Endpoints", () => {
   });
 
   it("sets the active provider", async () => {
-    const result = await methods.setActiveProvider.execute(
-      {
-        agentId: agent.id,
-        name: "test",
-      },
-      app,
-    );
+    const result = await methods.setActiveProvider.execute({
+      agentId: agent.id,
+      name: "test",
+    }, app);
 
     expect(result.status).toBe("success");
     if (result.status === "success") {
@@ -125,8 +116,9 @@ describe("Social RPC Endpoints", () => {
     }
   });
 
-  it("returns agentNotFound when agent is missing", async () => {
-    const result = await methods.getCurrentAccount.execute({ agentId: "missing" }, app);
-    expect(result).toEqual({ status: "agentNotFound" });
+  it("throws when agent is missing", async () => {
+    await expect(
+      methods.getCurrentAccount.execute({ agentId: "missing" }, app),
+    ).rejects.toThrow("Agent not found");
   });
 });
