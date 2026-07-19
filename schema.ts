@@ -1,3 +1,4 @@
+import type { ConfigFieldMeta } from "@tokenring-ai/app/config/metadata";
 import { z } from "zod";
 
 export const SocialMediaPostMetadataSchema = z.record(z.string(), z.unknown());
@@ -9,6 +10,10 @@ export const SocialMediaAgentConfigSchema = z
   })
   .default({});
 
-export const SocialMediaConfigSchema = z.object({
-  agentDefaults: SocialMediaAgentConfigSchema.prefault({}),
-});
+export const SocialMediaConfigSchema = z
+  .object({
+    agentDefaults: SocialMediaAgentConfigSchema.prefault({}).meta({
+      label: "Agent Defaults",
+    } satisfies ConfigFieldMeta),
+  })
+  .meta({ label: "Social", description: "Social media publishing settings" } satisfies ConfigFieldMeta);
